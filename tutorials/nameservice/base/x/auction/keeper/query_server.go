@@ -3,6 +3,7 @@ package keeper
 import (
 	"context"
 	"errors"
+	sdk "github.com/cosmos/cosmos-sdk/types"
 
 	auction "github.com/cosmos/sdk-tutorials/tutorials/nameservice/base/x/auction"
 )
@@ -25,8 +26,9 @@ func (qs queryServer) Name(ctx context.Context, r *auction.QueryNameRequest) (*a
 	if len(r.Name) == 0 {
 		return nil, auction.ErrEmptyName
 	}
+	goCtx := sdk.UnwrapSDKContext(ctx)
 
-	record, err := qs.k.GetNameRecord(ctx, r.Name)
+	record, err := qs.k.GetNameRecord(goCtx, r.Name)
 	if err != nil {
 		return nil, err
 	}
@@ -34,4 +36,21 @@ func (qs queryServer) Name(ctx context.Context, r *auction.QueryNameRequest) (*a
 	return &auction.QueryNameResponse{
 		Name: &record,
 	}, nil
+}
+
+func (qs queryServer) Names(ctx context.Context, r *auction.QueryNamesRequest) (*auction.QueryNamesResponse, error) {
+	if r == nil {
+		return nil, errors.New("empty request")
+	}
+	goCtx := sdk.UnwrapSDKContext(ctx)
+
+	names, err := qs.k.GetNames(goCtx)
+	if err != nil {
+		return nil, err
+	}
+
+	return &auction.QueryNamesResponse{
+		Names: names,
+	}, nil
+
 }

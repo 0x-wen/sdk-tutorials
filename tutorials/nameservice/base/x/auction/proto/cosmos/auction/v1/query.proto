@@ -14,10 +14,19 @@ service Query {
   rpc Name(QueryNameRequest) returns (QueryNameResponse) {
     option (google.api.http).get = "/cosmos/ns/name/{name}";
   }
+  rpc Names(QueryNamesRequest) returns (QueryNamesResponse) {
+    option (google.api.http).get = "/cosmos/ns/names";
+  }
 }
 
 // QueryNameResponse is the response type for the Query/Names RPC method
-message QueryNameResponse { Name name = 1; }
+message QueryNameResponse {Name name = 1;}
 
 // QueryNameRequest is the request type for the Query/Names RPC method
-message QueryNameRequest { string name = 1; }
+message QueryNameRequest {string name = 1;}
+
+message QueryNamesRequest {}
+
+message QueryNamesResponse {
+  repeated Name names = 1;
+}

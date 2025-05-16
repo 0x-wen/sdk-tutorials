@@ -49,6 +49,8 @@ func initAppConfig() (string, interface{}) {
 	srvCfg.StateSync.SnapshotInterval = 1000
 	srvCfg.StateSync.SnapshotKeepRecent = 10
 
+	srvCfg.BaseConfig.MinGasPrices = "0.0001uatom"
+
 	customAppConfig := CustomAppConfig{
 		Config: *srvCfg,
 	}
@@ -114,6 +116,7 @@ func queryCommand() *cobra.Command {
 		authcmd.QueryTxCmd(),
 		server.QueryBlockResultsCmd(),
 		auctionmod.QueryWhoisCmd(),
+		auctionmod.QueryWhoisListCmd(),
 	)
 
 	return cmd
@@ -158,7 +161,7 @@ func newApp(
 	}
 
 	valKey, ok := appOpts.Get(auction.FlagValKey).(string)
-	if !ok {
+	if ok {
 		valKey = "val"
 	}
 

@@ -1,0 +1,1 @@
+exampled tx reserve k1 cosmos18vzkyyam57e0pvm5lmy88fkehh4mawqmykumfr 100uatom --from cosmos18vzkyyam57e0pvm5lmy88fkehh4mawqmykumfr --fees=1001uatom --chain-id=demo -y --keyring-backend=test --home ./nodes/node0

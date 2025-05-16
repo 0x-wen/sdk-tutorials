@@ -1,15 +1,14 @@
 package keeper
 
 import (
-	"context"
 	"fmt"
-
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
 	auction "github.com/cosmos/sdk-tutorials/tutorials/nameservice/base/x/auction"
 )
 
-func (k Keeper) GetNameRecord(ctx context.Context, name string) (auction.Name, error) {
+// GetNameRecord 获取指定名称记录，与内存储存交互
+func (k Keeper) GetNameRecord(ctx sdk.Context, name string) (auction.Name, error) {
 	nameRecord, err := k.Names.Get(ctx, name)
 	if err != nil {
 		return auction.Name{}, err
@@ -20,9 +19,11 @@ func (k Keeper) GetNameRecord(ctx context.Context, name string) (auction.Name, e
 
 func (k Keeper) reserveName(ctx sdk.Context, nr auction.Name) error {
 	owner, _ := sdk.AccAddressFromBech32(nr.Owner)
+	// 转账给模块账号
 	if err := k.executeTransfer(ctx, owner, nr.Amount); err != nil {
 		return err
 	}
+	// k 设置存储, [auction.Name.Name] -> auction.Name
 	if err := k.Names.Set(ctx, nr.Name, nr); err != nil {
 		// TODO: Custom error
 		return err
@@ -63,9 +64,9 @@ func (k Keeper) validateAndFormat(ctx sdk.Context, msg *auction.MsgBid) (auction
 }
 
 func (k Keeper) checkSufficientBalance(ctx sdk.Context, senderAddr sdk.AccAddress, amount sdk.Coins) error {
-	found, payment := amount.Find(k.defaultDenom)
+	found, payment := amount.Find("uatom")
 	if !found {
-		return fmt.Errorf("invalid coin denom - %s, default denom: %s", amount, k.defaultDenom)
+		return fmt.Errorf("invalid coin denom - %s, default denom: %s", amount, "uatom")
 	}
 
 	balance := k.bk.GetBalance(ctx, senderAddr, payment.Denom)
@@ -82,4 +83,20 @@ func (k Keeper) executeTransfer(ctx sdk.Context, senderAddr sdk.AccAddress, amou
 		return err
 	}
 	return nil
+}
+
+func (k Keeper) GetNames(ctx sdk.Context) ([]*auction.Name, error) {
+	iter, err := k.Names.Iterate(ctx, nil)
+	if err != nil {
+		return nil, err
+	}
+	var names []*auction.Name
+	values, err := iter.Values()
+	if err != nil {
+		return nil, err
+	}
+	for i := range values {
+		names = append(names, &values[i])
+	}
+	return names, nil
 }

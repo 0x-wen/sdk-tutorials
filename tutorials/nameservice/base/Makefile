@@ -87,11 +87,11 @@ all: lint test install
 ###                                  Build                                  ###
 ###############################################################################
 
-install: enforce-go-version
+install:
 	@echo "Installing exampled..."
 	go install -mod=readonly $(BUILD_FLAGS) ./cmd/exampled
 
-build: enforce-go-version
+build:
 	@echo "Building exampled..."
 	go build $(BUILD_FLAGS) -o $(BUILDDIR)/ ./cmd/exampled
 

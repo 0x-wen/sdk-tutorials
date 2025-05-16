@@ -19,15 +19,14 @@ type Keeper struct {
 
 	authority string
 
-	bk           auction.BankKeeper
-	defaultDenom string
+	bk auction.BankKeeper
 
 	// state management
 	Schema collections.Schema
 	Names  collections.Map[string, auction.Name]
 }
 
-func NewKeeper(cdc codec.BinaryCodec, addressCodec address.Codec, storeService storetypes.KVStoreService, authority string, bk auction.BankKeeper, denom string) Keeper {
+func NewKeeper(cdc codec.BinaryCodec, addressCodec address.Codec, storeService storetypes.KVStoreService, authority string, bk auction.BankKeeper) Keeper {
 	if _, err := addressCodec.StringToBytes(authority); err != nil {
 		panic(fmt.Errorf("invalid authority address: %w", err))
 	}
@@ -38,7 +37,6 @@ func NewKeeper(cdc codec.BinaryCodec, addressCodec address.Codec, storeService s
 		addressCodec: addressCodec,
 		authority:    authority,
 		bk:           bk,
-		defaultDenom: denom,
 		Names:        collections.NewMap(sb, auction.NamesKey, "names", collections.StringKey, codec.CollValue[auction.Name](cdc)),
 	}
 

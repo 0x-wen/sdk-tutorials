@@ -8,6 +8,8 @@ import (
 
 	"github.com/cosmos/sdk-tutorials/tutorials/nameservice/base/app"
 	"github.com/cosmos/sdk-tutorials/tutorials/nameservice/base/cmd/exampled/cmd"
+
+	_ "github.com/cosmos/sdk-tutorials/tutorials/nameservice/base/app/params"
 )
 
 func main() {

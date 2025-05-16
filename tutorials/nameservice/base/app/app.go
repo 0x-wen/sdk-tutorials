@@ -82,8 +82,7 @@ import (
 
 const (
 	Bech32Prefix         = "cosmos"
-	AppName              = "tutorial"
-	DefaultDenom         = "uatom"
+	AppName              = "example"
 	Bech32PrefixAccAddr  = Bech32Prefix
 	Bech32PrefixAccPub   = Bech32Prefix + "pub"
 	Bech32PrefixValAddr  = Bech32Prefix + "valoper"
@@ -354,7 +353,6 @@ func NewExampleApp(
 		runtime.NewKVStoreService(keys[auction.StoreKey]),
 		authtypes.NewModuleAddress(govtypes.ModuleName).String(),
 		app.BankKeeper,
-		DefaultDenom,
 	)
 
 	app.mm = module.NewManager(

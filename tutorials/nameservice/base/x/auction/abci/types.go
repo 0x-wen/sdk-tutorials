@@ -9,6 +9,7 @@ import (
 	"github.com/cosmos/sdk-tutorials/tutorials/nameservice/base/x/auction/provider"
 )
 
+// PrepareProposalHandler 处理共识过程中的提案的准备
 type PrepareProposalHandler struct {
 	logger      log.Logger
 	txConfig    client.TxConfig
@@ -18,12 +19,14 @@ type PrepareProposalHandler struct {
 	runProvider bool
 }
 
+// ProcessProposalHandler 处理共识过程中的提案,验证该提案和包括的投票扩展
 type ProcessProposalHandler struct {
 	TxConfig client.TxConfig
 	Codec    codec.Codec
 	Logger   log.Logger
 }
 
+// VoteExtHandler 该结构用于处理投票扩展
 type VoteExtHandler struct {
 	logger  log.Logger
 	mempool *mempool.ThresholdMempool

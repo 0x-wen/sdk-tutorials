@@ -37,7 +37,7 @@ func NewPrepareProposalHandler(
 
 func (h *PrepareProposalHandler) PrepareProposalHandler() sdk.PrepareProposalHandler {
 	return func(ctx sdk.Context, req *abci.RequestPrepareProposal) (*abci.ResponsePrepareProposal, error) {
-		h.logger.Info("🛠️ :: Prepare Proposal")
+		h.logger.Info("🛠️ :: 1.Prepare Proposal")
 		var proposalTxs [][]byte
 
 		// Get Vote Extensions
@@ -140,7 +140,7 @@ func (h *ProcessProposalHandler) ProcessProposalHandler() sdk.ProcessProposalHan
 }
 
 func processVoteExtensions(req *abci.RequestPrepareProposal, log log.Logger) (SpecialTransaction, error) {
-	log.Info("🛠️ :: Process Vote Extensions")
+	log.Info("🛠️ :: 2.Process Vote Extensions")
 
 	// Create empty response
 	st := SpecialTransaction{

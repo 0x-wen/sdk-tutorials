@@ -1,7 +1,6 @@
 package module
 
 import (
-	"context"
 	"fmt"
 
 	"github.com/cosmos/cosmos-sdk/client"
@@ -77,7 +76,7 @@ func QueryWhoisCmd() *cobra.Command {
 
 			queryClient := auction.NewQueryClient(clientCtx)
 			params := &auction.QueryNameRequest{Name: args[0]}
-			res, err := queryClient.Name(context.Background(), params)
+			res, err := queryClient.Name(clientCtx.CmdContext, params)
 			if err != nil {
 				return err
 			}
@@ -86,6 +85,32 @@ func QueryWhoisCmd() *cobra.Command {
 			cmd.Println(fmt.Sprintf("This is the resolve: %s", res.Name))
 			cmd.Println(fmt.Sprintf("This is the owner: %s", res.Name.Owner))
 
+			return nil
+		},
+	}
+
+	flags.AddQueryFlagsToCmd(cmd)
+	return cmd
+}
+
+func QueryWhoisListCmd() *cobra.Command {
+	cmd := &cobra.Command{
+		Use:   "whois-list",
+		Short: "Get the resolve address and owner for a names record",
+		Args:  cobra.NoArgs,
+		RunE: func(cmd *cobra.Command, args []string) error {
+			clientCtx, err := client.GetClientTxContext(cmd)
+			if err != nil {
+				return err
+			}
+
+			queryClient := auction.NewQueryClient(clientCtx)
+			params := &auction.QueryNamesRequest{}
+			res, err := queryClient.Names(clientCtx.CmdContext, params)
+			if err != nil {
+				return err
+			}
+			cmd.Println(fmt.Sprintf("All Names: %s", res.Names))
 			return nil
 		},
 	}
